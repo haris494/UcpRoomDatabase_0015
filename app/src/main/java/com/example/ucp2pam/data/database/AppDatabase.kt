@@ -1,17 +1,19 @@
-package com.example.ucp2pam.database
+package com.example.ucp2pam.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.ucp2pam.dao.DokterDao
-import com.example.ucp2pam.model.Dokter
+import com.example.ucp2pam.data.dao.DokterDao
+import com.example.ucp2pam.data.dao.JadwalDao
+import com.example.ucp2pam.data.entity.Dokter
+import com.example.ucp2pam.data.entity.Jadwal
 
-@Database(entities = [Dokter::class], version = 1)
+
+@Database(entities = [Dokter::class, Jadwal::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
-
-    // Mendeklarasikan DAO untuk akses data
     abstract fun dokterDao(): DokterDao
+    abstract fun jadwalDao(): JadwalDao
 
     companion object {
         @Volatile
@@ -20,9 +22,9 @@ abstract class AppDatabase : RoomDatabase() {
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
+                    context.applicationContext.toString(),
                     AppDatabase::class.java,
-                    "dokter_database"
+                    "app_database"
                 ).build()
                 INSTANCE = instance
                 instance
@@ -30,3 +32,5 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
 }
+
+
